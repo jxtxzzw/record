@@ -14,6 +14,7 @@ import 'codemirror/mode/clike/clike' // Java, C, C++ 都是 clike 中的
 import 'codemirror/mode/python/python'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/sql/sql'
+import 'codemirror/mode/mllike/mllike'
 
 // codemirror active-line.js
 import 'codemirror/addon/selection/active-line.js'

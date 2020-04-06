@@ -53,6 +53,7 @@
             <Radio label="Python"></Radio>
             <Radio label="Javascript"></Radio>
             <Radio label="SQL"></Radio>
+            <Radio label="ML/SML/OCaml"></Radio>
           </RadioGroup>
         </FormItem>
         <FormItem v-if="formValidate.shareMore" label="代码">
@@ -148,6 +149,9 @@ export default {
             break
           case 'SQL':
             mode = 'text/x-sql'
+            break
+          case 'ML/SML/OCaml':
+            mode = 'text/x-ocaml'
             break
           default:
             break

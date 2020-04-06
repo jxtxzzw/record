@@ -111,6 +111,9 @@ export default {
           case 'SQL':
             mode = 'text/x-sql'
             break
+          case 'ML/SML/OCaml':
+            mode = 'text/x-ocaml'
+            break
           default:
             break
         }
