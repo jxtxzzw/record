@@ -80,11 +80,23 @@ Record.init({
   }
 }, { sequelize })
 
+class Star extends Model {
+}
+
+Star.init({
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  }
+}, { sequelize })
+
 Item.hasMany(Record, { foreignKey: 'item' })
 Item.hasMany(Code, { foreignKey: 'item' })
+Item.hasMany(Star, { foreignKey: 'item' })
 Item.belongsToMany(Tag, { through: ItemTag, foreignKey: 'item' })
 Tag.belongsToMany(Item, { through: ItemTag, foreignKey: 'tag' })
 
 module.exports = {
-  Item, Tag, Code, Record
+  Item, Tag, Code, Record, Star
 }

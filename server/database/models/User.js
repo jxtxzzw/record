@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const sequelize = require('../index')
 const Model = Sequelize.Model
 const Comment = require('./Comment')
-const { Code, Record } = require('./Item')
+const { Code, Record, Star } = require('./Item')
 
 class Subscript extends Model {}
 Subscript.init({
@@ -90,5 +90,6 @@ User.belongsToMany(Subscription, { through: Subscript, foreignKey: 'user' })
 User.hasMany(Code, { foreignKey: 'user' })
 User.hasMany(Record, { foreignKey: 'user' })
 User.hasMany(Comment, { foreignKey: 'user' })
+User.hasMany(Star, { foreignKey: 'user' })
 
 module.exports = { User, Subscription, Subscript }

@@ -7,6 +7,7 @@ require('./update')
 require('./Item')
 require('./record')
 require('./Comment')
+require('./Star')
 
 // Export the server middleware
 export default {

@@ -4,6 +4,8 @@
       <Input search enter-button placeholder="请输入关键字，不区分大小写……" @on-search="handleSearch" />
     </Row>
     <div style="height: 20px"></div>
+    <Checkbox v-model="starOnly" :disabled="!this.$auth.$state.loggedIn" @on-change="starFilter">只查看我的星标题目</Checkbox>
+    <div style="height: 20px"></div>
     <Table class="table" :loading="loading" row-key="id" :columns="recordColumns" :data="recordDataPaged" @on-sort-change="sortChanged" />
     <div style="margin: 10px;overflow: hidden">
       <div style="float: right;">
@@ -34,6 +36,7 @@ export default {
   components: { EditRecordModal },
   data () {
     return {
+      starOnly: false,
       pageSize: 20,
       pageSizeOpts: [10, 20, 50, 100],
       pageCurrent: 1,
@@ -44,7 +47,8 @@ export default {
       recordColumns: [],
       recordData: [],
       records: [],
-      recordStatus: {}
+      recordStatus: {},
+      starStatus: []
     }
   },
   computed: {
@@ -97,13 +101,21 @@ export default {
     },
     async loadData (keyword = undefined) {
       this.loading = true
+      console.log(keyword)
       this.recordData = await this.$axios.$post('/api/Item/itemList', {
         keyword
       })
       if (this.$auth.$state.loggedIn) {
         // 数据库查询的传输的速度其实是很快的，慢的是渲染的速度，所以这个不涉及 1000 多行的表格渲染，可以不优化
         this.records = (await this.$axios.$post('/api/Record/getMyRecords')).problems
+        this.starStatus = await this.$axios.$post('/api/Star/getMyStarStatus')
+        console.log(this.starStatus)
       }
+      // 星标过滤，默认值为 false，也适用于非登录用户
+      if (this.starOnly) {
+        this.recordData = this.recordData.filter(el => this.starStatus.includes(el.id))
+      }
+      // 默认排序，避免 Mariadb 可能会错乱的数组排序
       this.recordData = customSort({}, this.recordData)
       this.loading = false
     },
@@ -128,12 +140,28 @@ export default {
           return h('div', [
             h('Button', {
               props: {
-                type: this.recordStatus[parseInt(params.row.id)] ? 'text' : 'success',
-                long: true,
+                type: this.starStatus.includes(params.row.id) ? 'warning' : undefined,
+                shape: 'circle',
+                icon: 'ios-star',
                 disabled: !this.$auth.$state.loggedIn
               },
               style: {
                 margin: '5px 5px 5px 5px'
+              },
+              on: {
+                click: () => {
+                  this.changeStarStatus(params.row.id)
+                }
+              }
+            }),
+            h('Button', {
+              props: {
+                type: this.recordStatus[parseInt(params.row.id)] ? 'text' : 'success',
+                disabled: !this.$auth.$state.loggedIn
+              },
+              style: {
+                margin: '5px 5px 5px 5px',
+                width: '50%'
               },
               on: {
                 click: () => {
@@ -162,6 +190,33 @@ export default {
       this.editId = id
       this.showEdit = true
     },
+    async changeStarStatus (id) {
+      try {
+        await this.$axios.$post('/api/Star/changeStarStatus', {
+          id
+        })
+        // 因为状态的变化前端就能算清楚，所以不需要重新去 loadData 了
+        let content = ''
+        if (this.starStatus.includes(id)) {
+          // 如果原来是包含 id 的，说明现在是取消星标，那么就过滤出所有其他 Id
+          this.starStatus = this.starStatus.filter(el => el !== id)
+          content = '取消星标成功'
+        } else {
+          // 原来是不包含 id 的，所以现在是增加星标
+          this.starStatus.push(id)
+          content = '增加星标成功'
+        }
+        this.$Message.success({
+          background: true,
+          content
+        })
+      } catch (e) {
+        this.$Message.error({
+          background: true,
+          content: '更改星标状态失败，错误信息：' + e
+        })
+      }
+    },
     async handleSearch (val) {
       await this.loadData(val)
     },
@@ -175,6 +230,12 @@ export default {
       customSort(info, this.recordData)
       // 排序后强制回到第 1 页
       this.pageCurrent = 1
+    },
+    async starFilter () {
+      // 过滤一下星标
+      await this.loadData()
+      // 不在 on change 直接 call loadData 是因为这个事件带了一个参数
+      // on-change: Fn(status: true|false)，所以会和 keyword 搞混
     }
   }
 }
