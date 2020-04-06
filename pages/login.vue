@@ -24,9 +24,9 @@
         <i-col offset="8" span="8">
           <Card :dis-hover="true" :bordered="false">
             <busyOverlay />
-            <Form ref="register">
+            <Form ref="register" @submit.native.prevent>
               <FormItem prop="email" label="邮箱">
-                <Input ref="email" v-model="email" placeholder="邮箱">
+                <Input ref="email" v-model="email" placeholder="邮箱" @on-enter="register">
                 <Icon slot="prefix" type="ios-person-outline" />
                 <!-- 用 slot="prepend" 是前面加一块出来，后果是对不齐，以及会令 4.0 的 maxlength 和 password 失效 -->
                 <!-- 这里应该是用 slot="prefix" -->
@@ -156,6 +156,12 @@ export default {
         this.$Message.success({
           background: true,
           content: '注册成功，请查看邮件以获取初始密码'
+        })
+      } else {
+        this.error = '注册失败，请检查邮箱是否输入正确'
+        this.$Message.error({
+          background: true,
+          content: '注册失败，请检查邮箱是否输入正确'
         })
       }
     }

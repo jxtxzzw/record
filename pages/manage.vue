@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="$auth.$state.user.id === 1">
+    <div v-if="$auth.$state.user.email === 'jxtxzzw@126.com'">
       <Row>
         <i-col span="24">
           <Divider>发送全体公告</Divider>

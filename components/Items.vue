@@ -4,7 +4,7 @@
       <Input search enter-button placeholder="请输入关键字，不区分大小写……" @on-search="handleSearch" />
     </Row>
     <div style="height: 20px"></div>
-    <Table :loading="loading" row-key="id" :columns="recordColumns" :data="recordDataPaged" @on-sort-change="sortChanged" />
+    <Table class="table" :loading="loading" row-key="id" :columns="recordColumns" :data="recordDataPaged" @on-sort-change="sortChanged" />
     <div style="margin: 10px;overflow: hidden">
       <div style="float: right;">
         <Page
@@ -192,5 +192,9 @@ export default {
     height: 100px;
     position: relative;
     border: 1px solid #eee;
+  }
+  .table table{
+    table-layout: auto;
+    width: 100% !important;
   }
 </style>
