@@ -77,7 +77,7 @@
         </Menu>
       </Header>
       <Content :style="{padding: '0 50px'}">
-        <Card dis-hover :style="{height: cardHeight + 'px', minWidth: '1200px'}">
+        <Card dis-hover :style="{height: cardHeight + 'px', minWidth: '400px'}">
           <div>
             <nuxt v-if="compatible" />
             <div v-else>
@@ -97,7 +97,7 @@
         </Card>
       </Content>
       <Footer class="layout-footer-center">
-        2020/04/05 - {{ moment().format('YYYY/MM/DD') }} &copy; 凝神长老
+        2020/04/06 - {{ moment().format('YYYY/MM/DD') }} &copy; 凝神长老
       </Footer>
     </Layout>
   </div>

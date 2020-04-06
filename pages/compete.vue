@@ -104,6 +104,7 @@ export default {
       this.recordData = await this.$axios.$post('/api/Item/itemList')
       this.total = this.recordData.length
       this.myRecords = await this.$axios.$post('/api/Record/getMyRecords')
+      this.recordData = customSort({}, this.recordData)
       this.loading = false
     },
     async loadUsers () {

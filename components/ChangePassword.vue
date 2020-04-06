@@ -14,7 +14,7 @@
         <Input v-model="formValidate.newPassword" type="password" password />
       </FormItem>
       <FormItem label="确认密码" prop="newPasswordConfirm">
-        <Input v-model="formValidate.newPasswordConfirm" type="password" password />
+        <Input v-model="formValidate.newPasswordConfirm" type="password" password @on-enter="handleChangePassword('formValidate')" />
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleChangePassword('formValidate')">

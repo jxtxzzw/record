@@ -4,7 +4,7 @@
       <Input search enter-button placeholder="请输入关键字，不区分大小写……" @on-search="handleSearch" />
     </Row>
     <div style="height: 20px"></div>
-    <Table :loading="loading" row-key="id" :columns="recordColumns" :data="recordDataPaged" @on-sort-change="sortChanged" />
+    <Table class="table" :loading="loading" row-key="id" :columns="recordColumns" :data="recordDataPaged" @on-sort-change="sortChanged" />
     <div style="margin: 10px;overflow: hidden">
       <div style="float: right;">
         <Page
@@ -104,6 +104,7 @@ export default {
         // 数据库查询的传输的速度其实是很快的，慢的是渲染的速度，所以这个不涉及 1000 多行的表格渲染，可以不优化
         this.records = (await this.$axios.$post('/api/Record/getMyRecords')).problems
       }
+      this.recordData = customSort({}, this.recordData)
       this.loading = false
     },
     extendRecordColumns () {
@@ -192,5 +193,9 @@ export default {
     height: 100px;
     position: relative;
     border: 1px solid #eee;
+  }
+  .table table{
+    table-layout: auto;
+    width: 100% !important;
   }
 </style>
