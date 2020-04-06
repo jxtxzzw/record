@@ -55,6 +55,18 @@ async function getRecordsByUser (userEmail) {
   })
   const analyticalData = analysis(records)
   analyticalData.user = userEmail
+  analyticalData.shareCount = await Code.count({
+    where: {
+      user: userEmail
+    }
+  })
+  analyticalData.languages = await Code.count({
+    where: {
+      user: userEmail
+    },
+    attributes: ['language'],
+    group: 'language'
+  })
   return analyticalData
 }
 
