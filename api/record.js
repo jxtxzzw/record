@@ -118,36 +118,19 @@ function analysis (records) {
     problems: []
   }
 
-  // 打卡次数（刷题总数）
-  analyticalData.count = records.length
-
+  const tmp = []
   for (const x of records) {
     x.recordAt = new Date(x.recordAt)
+    tmp.push(dateFormat(x.recordAt))
   }
   records.sort(function (a, b) {
     return b.recordAt - a.recordAt
   })
+  let cursor
+  const today = new Date()
 
-  // 连续天数
-  const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
-  let cursor = new Date()
-  let consist = 0
-  let i = 0
-  while (i < records.length) {
-    const day = records[i].recordAt
-    if ((cursor - day) / DAY_MILLISECONDS >= 2) {
-      // 不能用 24 小时来判断：前一天的凌晨 00:01 打卡到后一天的 23:59 打卡，只有大于等于 2 了才是真的间断了
-      break
-    } else {
-      // 不是同一天的才加 1
-      if (dateFormat(cursor) !== dateFormat(day)) {
-        consist++
-      }
-      i++
-      cursor = day
-    }
-  }
-  analyticalData.consist = consist
+  // 打卡次数（刷题总数）
+  analyticalData.count = records.length
 
   // 累计天数
   if (records.length > 0) {
@@ -165,12 +148,7 @@ function analysis (records) {
     // Contribution 图数据
     const commits = []
     // 所有提交对应的日期
-    const tmp = []
-    for (const x of records) {
-      tmp.push(dateFormat(x.recordAt))
-    }
     cursor = records[records.length - 1].recordAt
-    const today = new Date()
     let day = cursor.getDay()
     while (cursor < today) {
       const s = dateFormat(cursor)
@@ -189,6 +167,18 @@ function analysis (records) {
       day++
     }
     analyticalData.commits = commits
+
+    // 连续天数
+    // 今天已打卡，从 1 开始记，今天未打卡，则从昨天开始记
+    let consist = tmp.includes(dateFormat(today)) ? 1 : 0
+    cursor = today
+    cursor = new Date(cursor.setDate(cursor.getDate() - 1)) // 从前一天开始
+    while (tmp.includes(dateFormat(cursor))) {
+      consist++
+      // 往前倒
+      cursor = new Date(cursor.setDate(cursor.getDate() - 1))
+    }
+    analyticalData.consist = consist
 
     // 刷题列表
     const problems = []

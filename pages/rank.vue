@@ -26,7 +26,7 @@ export default {
         },
         {
           value: 'consist',
-          prompt: '按连续打卡天数（打卡间隔不超过 48 小时）排名'
+          prompt: '按连续打卡天数排名'
         },
         {
           value: 'uniqueDay',

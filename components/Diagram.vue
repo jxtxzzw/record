@@ -17,7 +17,7 @@
       </div>
     </i-circle>
     <a-statistic title="打卡次数（累计刷题数）" :value="data.count" style="margin-right: 50px" />
-    <a-statistic title="连续打卡天数（打卡间隔不超过 48 小时）" :value="data.consist" style="margin-right: 50px" />
+    <a-statistic title="连续打卡天数" :value="data.consist" style="margin-right: 50px" />
     <a-statistic title="累计打卡天数" :value="data.uniqueDay" style="margin-right: 50px" />
     <a-statistic title="分享的笔记和代码数" :value="data.shareCount" style="margin-right: 50px" />
     <Tag v-for="language in data.languages" :key="language.language" type="dot" color="primary">{{ language.language }} 使用 {{ language.count }} 次</Tag>
