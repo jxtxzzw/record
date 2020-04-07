@@ -148,23 +148,39 @@ function analysis (records) {
     // Contribution 图数据
     const commits = []
     // 所有提交对应的日期
+    let first = true
+    let day
     cursor = records[records.length - 1].recordAt
-    let day = cursor.getDay()
     while (cursor <= today) {
       const s = dateFormat(cursor)
       // day 是一周的第几天，针对当月来说
       // week 是第几周，针对所有数据来说，相当于图表的第几列
+      if (first) {
+        // 先强制 push 一个 0 次提交的，以避免所有天都有 commit 的情况下，热力图都是最浅颜色的问题
+        cursor = new Date(cursor.setDate(cursor.getDate() - 1))
+        day = cursor.getDay()
+        commits.push({
+          date: dateFormat(cursor),
+          commits: 0,
+          month: cursor.getMonth(),
+          day: cursor.getDay(),
+          week: Math.floor(day / 7)
+        })
+        day++
+        cursor = new Date(cursor.setDate(cursor.getDate() + 1))
+        first = false
+      }
       commits.push({
         date: s,
         // 获取相同日期有多少个，就是当日打卡次数
         commits: tmp.filter(e => e === s).length,
-        month: cursor.getMonth() - 1,
+        month: cursor.getMonth(),
         day: cursor.getDay(),
         week: Math.floor(day / 7)
       })
       // 加一天
-      cursor = new Date(cursor.setDate(cursor.getDate() + 1))
       day++
+      cursor = new Date(cursor.setDate(cursor.getDate() + 1))
     }
     analyticalData.commits = commits
 
