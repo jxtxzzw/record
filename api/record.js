@@ -150,7 +150,7 @@ function analysis (records) {
     // 所有提交对应的日期
     cursor = records[records.length - 1].recordAt
     let day = cursor.getDay()
-    while (cursor < today) {
+    while (cursor <= today) {
       const s = dateFormat(cursor)
       // day 是一周的第几天，针对当月来说
       // week 是第几周，针对所有数据来说，相当于图表的第几列
