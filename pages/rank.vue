@@ -31,6 +31,10 @@ export default {
         {
           value: 'uniqueDay',
           prompt: '按累计打卡天数排名'
+        },
+        {
+          value: 'shareCount',
+          prompt: '按分享的刷题笔记和代码数排名'
         }
       ],
       rankInfo: []
@@ -85,6 +89,11 @@ export default {
             return a.uniqueDay - b.uniqueDay
           })
           break
+        case 'shareCount':
+          this.rankInfo.sort((a, b) => {
+            return a.shareCount - b.shareCount
+          })
+          break
       }
       this.drawChart()
     },
@@ -102,7 +111,21 @@ export default {
       }
 
       // Step 2: 载入数据源
-      this.chart.data(this.rankInfo)
+      if (this.subject === 'shareCount') {
+        const rankInfoWithLanguages = []
+        for (const x of this.rankInfo) {
+          for (const lan of x.languages) {
+            const y = Object.assign({}, x)
+            y.language = lan.language
+            y.languageCount = lan.count
+            y.languages = undefined
+            rankInfoWithLanguages.push(y)
+          }
+        }
+        this.chart.data(rankInfoWithLanguages)
+      } else {
+        this.chart.data(this.rankInfo)
+      }
 
       // Step 3：创建图形语法，绘制柱状图
       this.chart.axis('user', {
@@ -120,22 +143,78 @@ export default {
           }
         }
       })
-      this.chart.legend(false)
-      this.chart.coordinate().transpose()
-      this.chart
-        .interval()
-        .position('user*' + this.subject)
-        .size(26)
-        .label('value', {
-          style: {
-            fill: '#8d8d8d'
-          },
-          offset: 10
+
+      if (this.subject === 'shareCount') {
+        this.chart.legend({
+          position: 'top'
         })
+        this.chart.coordinate('rect').transpose()
+        this.chart.tooltip({
+          shared: true,
+          showMarkers: false
+        })
+        this.chart.interaction('active-region')
+        this.chart
+          .interval()
+          .adjust('stack')
+          .position('user*languageCount')
+          .color('language*user', (language, user) => {
+            if (language === 'C/C++') {
+              return '#1890ff'
+            }
+            if (language === 'Java') {
+              return '#41C769'
+            }
+            if (language === 'Python') {
+              return '#FAD029'
+            }
+            if (language === 'SQL') {
+              return '#f5222d'
+            }
+            if (language === 'Javascript') {
+              return '#f58000'
+            }
+            if (language === 'ML/SML/OCaml') {
+              return '#9a08f5'
+            }
+          })
+          .size(26)
+          .label('languageCount*language', (val, t) => {
+            const color = t === 'white'
+            if (val < 0.05) {
+              return null
+            }
+            return {
+              position: 'middle',
+              offset: 0,
+              style: {
+                fontSize: 12,
+                fill: color,
+                lineWidth: 0,
+                stroke: null,
+                shadowBlur: 2,
+                shadowColor: 'rgba(0, 0, 0, .45)'
+              }
+            }
+          })
+      } else {
+        this.chart.legend(false)
+        this.chart.coordinate().transpose()
+        this.chart.interaction('element-active')
+        this.chart
+          .interval()
+          .position('user*' + this.subject)
+          .size(26)
+          .label('value', {
+            style: {
+              fill: '#8d8d8d'
+            },
+            offset: 10
+          })
+      }
 
       // Step 4: 渲染图表
       this.chart.forceFit()
-      this.chart.interaction('element-active')
       this.chart.render()
     }
   }
