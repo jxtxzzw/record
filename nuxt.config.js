@@ -84,7 +84,7 @@ module.exports = {
   auth: {
     cookie: {
       options: {
-        expires: 3
+        expires: 30
       }
     },
     resetOnError: true,

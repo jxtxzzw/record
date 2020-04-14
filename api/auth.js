@@ -49,7 +49,7 @@ router.post('/auth/login', async (req, res, next) => {
       },
       process.env.RECORD_JWT_SECERT,
       {
-        expiresIn: 60000
+        expiresIn: '30d'
       }
     )
 
