@@ -2,6 +2,8 @@
 
 > 打卡求监督，我们可以一起成就更好的自己
 
+[![pipeline status](https://gitlab.jxtxzzw.com/jxtxzzw/record/badges/master/pipeline.svg)](https://gitlab.jxtxzzw.com/jxtxzzw/record/-/commits/master) [![coverage report](https://gitlab.jxtxzzw.com/jxtxzzw/record/badges/master/coverage.svg)](https://gitlab.jxtxzzw.com/jxtxzzw/record/-/commits/master)
+
 ## Build Setup
 
 ``` bash
