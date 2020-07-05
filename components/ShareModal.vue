@@ -114,6 +114,9 @@ export default {
           case 'ML/SML/OCaml':
             mode = 'text/x-ocaml'
             break
+          case 'Go':
+            mode = 'text/x-go'
+            break
           default:
             break
         }

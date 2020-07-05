@@ -54,6 +54,7 @@
             <Radio label="Javascript"></Radio>
             <Radio label="SQL"></Radio>
             <Radio label="ML/SML/OCaml"></Radio>
+            <Radio label="Go"></Radio>
           </RadioGroup>
         </FormItem>
         <FormItem v-if="formValidate.shareMore" label="代码">
@@ -152,6 +153,9 @@ export default {
             break
           case 'ML/SML/OCaml':
             mode = 'text/x-ocaml'
+            break
+          case 'Go':
+            mode = 'text/x-go'
             break
           default:
             break

@@ -15,6 +15,7 @@ import 'codemirror/mode/python/python'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/sql/sql'
 import 'codemirror/mode/mllike/mllike'
+import 'codemirror/mode/go/go'
 
 // codemirror active-line.js
 import 'codemirror/addon/selection/active-line.js'

@@ -177,6 +177,9 @@ export default {
             if (language === 'ML/SML/OCaml') {
               return '#9a08f5'
             }
+            if (language === 'Go') {
+              return '#08d9f5'
+            }
           })
           .size(26)
           .label('languageCount*language', (val, t) => {
